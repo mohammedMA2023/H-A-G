@@ -10,6 +10,8 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -114,6 +116,61 @@
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
+                        <div id="popup-container" class="popup-container border">
+       <h2>Enter Location</h2>
+       <p>Example: City, Country</p>
+
+
+       <div class="input-group">
+           <label for="locationInput">Location:</label>
+           <input type="text" id="locationInput" placeholder="E.g., New York, USA">
+       </div>
+
+
+       <button  class="border" onclick="closeModel()">Get Coordinates</button>
+   </div>
+                        <div class="row">
+       <div class="dashboard">
+           <div class="card">
+               <h2 class="text-primary">Air Quality</h2>
+               <div class="data air-quality" id="airQualityData">12</div>
+               <div class="additional-info text-muted" id="airQualityInfo">
+                   <p>AQI: 50 (Good)</p>
+                   <p>Last Updated: 2024-01-22 12:30 PM</p>
+               </div>
+           </div>
+
+
+           <div class="card">
+               <h2 class="text-success">Weather</h2>
+               <div class="data weather" id="weatherData">...</div>
+               <div class="additional-info text-muted" id="weatherInfo">
+                   <p>Humidity: 60%</p>
+                   <p>Wind Speed: 10 km/h</p>
+                   <p>Last Updated: 2024-01-22 12:30 PM</p>
+               </div>
+           </div>
+
+
+           <div class="card">
+               <h2 class="text-warning">Pollen Levels</h2>
+               <div class="data pollen" id="pollenData">High</div>
+               <div class="additional-info text-muted" id="pollenInfo">
+                   <p>Last Updated: 2024-01-22 12:30 PM</p>
+               </div>
+           </div>
+
+
+           <div class="card">
+               <h2 class="text-danger">Rain Forecast</h2>
+               <div class="data rain-forecast" id="rainForecastData">60%</div>
+               <div class="additional-info text-muted" id="rainForecastInfo">
+                   <p>Last Updated: 2024-01-22 12:30 PM</p>
+               </div>
+           </div>
+       </div>
+   </div>
+
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">

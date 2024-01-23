@@ -10,6 +10,116 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+
+
+.popup-container {
+   background: #fff;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+   border-radius: 10px;
+   text-align: center;
+   height:auto;
+   width: 20%; /* Adjust the width as needed */
+   margin: auto;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: 999; /* Ensure the popup is on top */
+}
+
+
+
+
+       label {
+           display: block;
+           margin-bottom: 5px;
+           color: #333;
+       }
+
+
+       input {
+           width: 100%;
+           padding: 8px;
+           margin-bottom: 10px;
+           box-sizing: border-box;
+           border: 1px solid #ccc;
+           border-radius: 5px;
+       }
+
+
+       button {
+           background: #007BFF;
+           color: #fff;
+           padding: 10px 20px;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+       }
+
+
+       .dashboard {
+           display: grid;
+           grid-template-columns: repeat(2, 1fr);
+           gap: 20px;
+           justify-content: space-around;
+           padding: 20px;
+           background-color: rgba(255, 255, 255, 0.9);
+           border-radius: 15px;
+           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+       }
+
+
+       .card {
+           border: none;
+           border-radius: 10px;
+           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+           padding: 20px;
+           margin: 10px;
+           text-align: center;
+           background-color: white;
+       }
+
+
+       h2 {
+           color: #333;
+           font-size: 28px;
+       }
+
+
+       .data {
+           font-size: 64px;
+           font-weight: bold;
+           margin-top: 10px;
+       }
+
+
+       .air-quality {
+           color: #007BFF;
+       }
+
+
+       .weather {
+           color: #28A745;
+       }
+
+
+       .pollen {
+           color: #FFC107;
+       }
+
+
+       .rain-forecast {
+           color: #FF073A;
+       }
+
+
+       .additional-info {
+           margin-top: 20px;
+           font-size: 18px;
+           color: #6C757D;
+       }
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
