@@ -6,62 +6,46 @@
     //
 // Scripts
 //
-/*
-function getHistoricalWeather() {
-    var apiKey = 'YOUR_WEATHERBIT_API_KEY';
-    var city = 'london';
-    var startDate = '2024-01-22'; // Specify the start date in YYYY-MM-DD format
-    var endDate = '2024-01-22';   // Specify the end date in YYYY-MM-DD format
-
-    var weatherEndpoint = `https://api.weatherbit.io/v2.0/history/daily?city=${city}&start_date=${startDate}&end_date=${endDate}&key=${apiKey}`;
-
-    fetch(weatherEndpoint)
-        .then(response => response.json())
-        .then(data => {
-            if (data.data && data.data.length > 0) {
-                // Extract and use historical weather data as needed
-                alert(JSON.stringify(data));
-                console.log(data.data);
-            } else {
-                console.log('No historical weather data available.');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching historical weather data:', error);
-        });
-}
-
-getHistoricalWeather();
-*/
+import { showGraph } from '../assets/demo/chart-area-demo.js';
 const url = "https://api.open-meteo.com/v1/forecast";
 const params = new URLSearchParams({
     latitude: 52.52,
     longitude: 13.41,
-    hourly: "temperature_2m,relative_humidity_2m,wind_speed_10m",
-    start: "today",
-    end: "now"
+    hourly: "temperature_2m", // Only request temperature data
+    start: "2024-01-24T00:00:00Z",
+    end: "2024-01-24T23:59:59Z"
 });
+
 fetch(`${url}?${params}`)
     .then(response => response.json())
     .then(data => {
-        const temps = data.hourly.temperature_2m;
-        const times = data.hourly.time;
-        const hourTemps = {};
-        for (let i = 0; i < temps.length; i++) {
-            const hour = new Date(times[i]).getHours();
-            if (hour in hourTemps) {
-                hourTemps[hour].push(temps[i]);
-            } else {
-                hourTemps[hour] = [temps[i]];
-            }
-        }
-        const avgTemps = Object.entries(hourTemps).map(([hour, temps]) => {
-            const avgTemp = temps.reduce((a, b) => a + b, 0) / temps.length;
-            return `${hour}:00: ${avgTemp.toFixed(1)}°C`;
+        const formattedHourlyTemperatures = [];
+
+        data.hourly.data.forEach(hourlyData => {
+            const timestamp = hourlyData.time;
+            const formattedDate = new Date(timestamp).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "numeric",
+                year: "numeric"
+            });
+            const formattedTemperature = hourlyData.temperature_2m;
+
+            formattedHourlyTemperatures.push({
+                date: formattedDate,
+                temperature: formattedTemperature
+            });
         });
-        alert(avgTemps);
-        alert(`Hourly temperatures from the start of today to now:\n${avgTemps.join("\n")}`);
+
+        // Now you have an array of objects with formatted dates and temperatures
+        console.log(formattedHourlyTemperatures);
+        alert(JSON.stringify(formattedHourlyTemperatures))
+        // Use this formatted data to display or process further
+        // ... (your existing code)
+    })
+    .catch(error => {
+        console.error('Error fetching weather data:', error);
     });
+
 
 function getCoordinates() {
        var locationInput = document.getElementById('locationInput').value;
@@ -86,13 +70,7 @@ function getCoordinates() {
    }
 
 
-   function closeModel(){
-       document.getElementById("popup-container").style.display = "none";
-       getCoordinates();
-       updateWeather();
-
-
-   }
+   
    function updateWeather() {
        // Replace 'YOUR_API_KEY' and 'CITY_NAME' with your actual OpenWeatherMap API key and city name
        var locationInput = document.getElementById('locationInput').value;
@@ -147,3 +125,10 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 });
+function closeModel(){
+    document.getElementById("popup-container").style.display = "none";
+    getCoordinates();
+    updateWeather();
+
+
+}
