@@ -6,46 +6,38 @@
     //
 // Scripts
 //
+function closeModel(){
+    document.getElementById("popup-container").style.display = "none";
+    getCoordinates();
+    updateWeather();
+
+
+}
 import { showGraph } from '../assets/demo/chart-area-demo.js';
-const url = "https://api.open-meteo.com/v1/forecast";
-const params = new URLSearchParams({
-    latitude: 52.52,
-    longitude: 13.41,
-    hourly: "temperature_2m", // Only request temperature data
-    start: "2024-01-24T00:00:00Z",
-    end: "2024-01-24T23:59:59Z"
-});
+const latitude = 51.5; // Replace with your latitude
+const longitude = -0.1; // Replace with your longitude
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&forecast_days=1`;
 
-fetch(`${url}?${params}`)
-    .then(response => response.json())
-    .then(data => {
-        const formattedHourlyTemperatures = [];
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    const hourlyData = data.hourly.time;
+    let x = [];
 
-        data.hourly.data.forEach(hourlyData => {
-            const timestamp = hourlyData.time;
-            const formattedDate = new Date(timestamp).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "numeric",
-                year: "numeric"
-            });
-            const formattedTemperature = hourlyData.temperature_2m;
-
-            formattedHourlyTemperatures.push({
-                date: formattedDate,
-                temperature: formattedTemperature
-            });
-        });
-
-        // Now you have an array of objects with formatted dates and temperatures
-        console.log(formattedHourlyTemperatures);
-        alert(JSON.stringify(formattedHourlyTemperatures))
-        // Use this formatted data to display or process further
-        // ... (your existing code)
-    })
-    .catch(error => {
-        console.error('Error fetching weather data:', error);
-    });
-
+    //alert(JSON.stringify(data.hourly))
+    for (let i = 0;i<hourlyData.length;i++){
+        const dateTimeString = hourlyData[i];
+        const date = new Date(Date.parse(dateTimeString));
+        const formattedTime = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        //alert(formattedTime);
+        x[i] = formattedTime;
+        }
+        let y = data.hourly["temperature_2m"];
+        //alert(JSON.stringify(y));
+        //alert(y.length);
+        showGraph(x,y);
+  })
+  .catch(error => console.error(error));
 
 function getCoordinates() {
        var locationInput = document.getElementById('locationInput').value;
@@ -125,10 +117,4 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 });
-function closeModel(){
-    document.getElementById("popup-container").style.display = "none";
-    getCoordinates();
-    updateWeather();
 
-
-}
