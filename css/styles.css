@@ -12,8 +12,45 @@
  */
 
 
+    /* Custom styling for the spinner */
+    #all-content{
+        display : "none";
 
-.popup-container {
+    }
+    .spinner-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color:white;
+
+    }
+
+    .spinner-border {
+      width: 100rem; /* Increase the size */
+      height: 100rem; /* Increase the size */
+      border: 0.5em solid rgba(255,255,255,0.3); /* Adjust the color and transparency */
+      border-top: 0.5em solid #007bff; /* Change the color here */
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Animation for the spinner */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Custom styling for the text */
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 2.5rem; /* Increase the font size */
+      font-weight: bold; /* Add bold style */
+      color: #ffffff; /* Change the color if needed */
+    }
+ .popup-container {
+
    background: #fff;
    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
    padding: 20px;
@@ -210,7 +247,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: #000000;
+  background-color: black;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
