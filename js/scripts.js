@@ -11,7 +11,6 @@ import { showGraph } from '../assets/demo/chart-area-demo.js';
 import { showBarGraph } from '../assets/demo/chart-bar-demo.js';
 
 // ... (your imports)
-
 class Dashboard {
     constructor() {
         document.getElementById("all-content").style.display = "none";
@@ -163,7 +162,7 @@ getAirQuality() {
   if (pm10 <= 430) return 'Very Unhealthy';
   return 'Hazardous';
 }
-function getLatestPollenLevels(apiKey, location) {
+getLatestPollenLevels(apiKey, location) {
     const url = `https://api.ambeedata.com/latest/pollen/${location}`;
 
     fetch(url, {
@@ -188,9 +187,28 @@ function getLatestPollenLevels(apiKey, location) {
 }
 
 }
-getLatestPollenLevels(apiKey, location);
+function showLogin(){
+    document.getElementById("loginCon").style.display = "block";
+
 
 }
+function changeUi() {
+    if (document.forms["form"]["auth"].value == "login") {
+        document.getElementById("username").style.display = "block";
+        document.forms["form"]["auth"].value ="reg";
+        document.forms["form"]["sub"].innerHTML ="Register";
+        document.querySelector("#login-reg").innerHTML = "Already have an account? Log In...";
+    } else if (document.forms["form"]["auth"].value == "reg") {
+        document.getElementById("username").style.display = "none";
+        document.forms["form"]["auth"].value ="login";
+        document.forms["form"]["sub"].innerHTML = "Log In";
+        document.querySelector("#login-reg").innerHTML= "Don't have an account? Register...";
+    }
+}
+
+
+
+
 
 window.addEventListener('DOMContentLoaded', event => {
     let dash = new Dashboard();
