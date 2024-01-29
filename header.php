@@ -42,39 +42,34 @@
          </nav>';
 
          
-     echo <<<EOT
-            <div id="loginCon" class="container">
-            <div class="row justify-content-center align-items-center vh-100">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Welcome to the Chat Room</h3>
-                        </div>
-                        <div class="card-body">
+echo <<<EOT
+            <div id="loginCon" class="popup-container border">
+
+                            <h3>Welcome to the Chat Room</h3>
+
+
                             <form class="form" id="form" name="form" action="login.php" method="post">
                                 <input type="hidden" id="auth" name="auth" value="login">
-                                <div id="username" style="display:none;" class="form-group">
+                                <div id="username" class="input-group" style="display:none;">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control" id="username" name="uname">
+                                    <input type="text" id="username" name="uname">
                                 </div>
-                                <div class="form-group">
+                                <br>
+                                <div class="input-group">
                                     <label for="userid">Email</label>
-                                    <input name="userid" type="email" class="form-control" id="userid" required>
+                                    <input name="userid" type="email" id="userid" required>
                                 </div>
-                                <div class="form-group">
+                                <br>
+                                <div class="input-group">
                                     <label for="password">Password</label>
-                                    <input name="password" type="password" class="form-control" id="password" required>
+                                    <input name="password" type="password" id="password" required>
                                 </div>
+                                <br>
                                 <button type="submit" name="sub" id="sub" class="btn btn-success btn-lg btn-block">Log In</button>
                                 <button id="login-reg" name="login-reg" type="button" class="btn btn-secondary btn-lg btn-block mt-3" onclick="changeUi()">Don't have an account? Register...</button>
                             </form>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-       EOT;
+      EOT;
 
     
 ?>
