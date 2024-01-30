@@ -91,13 +91,18 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
+                <div id="button-container">
+  <button onclick="document.getElementById('popup-container').style.display = 'block'" class="border" style="width:20%;" id="showLocCon">Click Me!</button>
+</div>
+
 
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Dashboard</h1>
+                        
+                                                
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
-
 
                         <div id="popup-container" class="popup-container border">
        <h2>Enter Location</h2>

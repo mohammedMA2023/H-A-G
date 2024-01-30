@@ -63,7 +63,7 @@ session_start();
             // Verify the entered password against the stored hashed password
             if ((password_verify($uPass, $storedHashedPassword)) && ($uName == $row["email"]) ) {
                 $status = "loggedIn";
-                $header = "home.php";
+                $header = "index.php";
                 $newUserID = $row["user_id"];
 
                 if (!isset($_SESSION["userid"])){
@@ -118,7 +118,7 @@ session_start();
                 $stmt->bind_param("sss",$u ,$email, $hashedPassword);
                  $stmt->execute();
                     $status = "loggedIn";
-                    $header = "home.php";
+                    $header = "index.php";
                      $newUserId = mysqli_insert_id($conn);
 
                     $_SESSION["userid"] = json_encode(array($newUserId,$u));
@@ -127,6 +127,7 @@ session_start();
             }           
     break;
 case "logout":
+    echo "logout";
     session_destroy();
 $header = "index.php";
 break;

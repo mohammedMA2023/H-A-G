@@ -13,12 +13,12 @@ import { showBarGraph } from '../assets/demo/chart-bar-demo.js';
 // ... (your imports)
 class Dashboard {
     constructor() {
+        
         document.getElementById("all-content").style.display = "none";
         document.getElementById("close-model").onclick = this.closeModel.bind(this);
         this.long = "";
         this.lat = "";
-        document.getElementById("popup-container").style.display = "block";
-
+        
         setInterval(this.updateDash.bind(this), 5000);
     }
 
@@ -188,6 +188,7 @@ getLatestPollenLevels(apiKey, location) {
 
 }
 function showLogin(){
+    document.getElementById("popup-container").style.display = "none";
     document.getElementById("loginCon").style.display = "block";
 
 
@@ -213,7 +214,8 @@ function changeUi() {
 window.addEventListener('DOMContentLoaded', event => {
     let dash = new Dashboard();
     document.getElementById("close-model").onclick = dash.closeModel;
-
+    document.getElementById("login-reg").onclick = changeUi;
+    document.getElementById("show-login").onclick = showLogin;
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
