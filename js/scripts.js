@@ -19,27 +19,30 @@ class Dashboard {
         this.long = "";
         this.lat = "";
         
-        setInterval(this.updateDash.bind(this), 5000);
+        
     }
 
     closeModel = () => {
 
+        document.getElementById("all-content").style.display = "none";
         document.getElementById("popup-container").style.display = "none";
         document.getElementById("spinner-container").style.display = "flex";
+        setInterval(this.updateDash.bind(this), 5000);
+        this.getCoordinates()
+        .then(() => {
+           this.getForecast();
+           this.getAQ();
+        
+    })    
+    
+    }
 
-        updateDash();
-        alert('done');
-
-        }
-
-    updateDash() {
-        if (document.getElementById("popup-container").style.display === "none") {
-            this.getCoordinates();
-
-            this.getAirQuality();
-            this.updateWeather();
-
-        }
+    updateDash(){
+        this.getAirQuality();
+           this.updateWeather();
+           
+        
+        
     }
 
     getForecast() {
@@ -83,27 +86,16 @@ class Dashboard {
             });
     }
 
-    getCoordinates() {
+    async getCoordinates() {
         var locationInput = document.getElementById('locationInput').value;
         var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
-        fetch(nominatimEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    var latitude = data[0].lat;
+        let response = await fetch(nominatimEndpoint)
+        let data = await response.json();
+        var latitude = data[0].lat;
 
-                    var longitude = data[0].lon;
-                    this.long = longitude;
-                    this.lat = latitude;
-                    this.getForecast();
-                    this.getAQ();
-                } else {
-
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching coordinates:', error);
-                });
+        var longitude = data[0].lon;
+        this.long = longitude;
+        this.lat = latitude;
     }
     getAQ() {
   const latitude = this.lat; // Replace with the latitude of the location you want to check
@@ -111,7 +103,6 @@ class Dashboard {
   const hourly = 'pm10,pm2_5'; // Replace with the hourly air quality variables you are interested in
   const today = new Date().toISOString().slice(0, 10); // Get today's date in ISO format
   const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=${hourly}&start_date=${today}&end_date=${today}`;
-  //alert(url);
   fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -142,7 +133,6 @@ getAirQuality() {
       // Extract the AQI value from the data
       let aqi = data.list[0].components.pm10;
       // Display the AQI value in the console
-      console.log(`The current air quality index is ${aqi}`);
       document.getElementById("airQualityData").innerHTML = aqi;
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
       document.getElementById("spinner-container").style.display = "none";
@@ -162,29 +152,7 @@ getAirQuality() {
   if (pm10 <= 430) return 'Very Unhealthy';
   return 'Hazardous';
 }
-getLatestPollenLevels(apiKey, location) {
-    const url = `https://api.ambeedata.com/latest/pollen/${location}`;
 
-    fetch(url, {
-        headers: {
-            'x-api-key': apiKey,
-        },
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
-    })
-    .then(data => {
-        const pollenLevels = data.data;
-        console.log('Pollen levels:', pollenLevels);
-    })
-    .catch(error => {
-        console.error(error.message);
-    });
-}
 
 }
 function showLogin(){

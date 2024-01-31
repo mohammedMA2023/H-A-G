@@ -12,7 +12,7 @@ export function showGraph(xVals,yVals){
         },
         scaleLabel: {
           display: true,
-          labelString: 'time'
+          labelString: 'Time'
         }
       }],
       yAxes: [{

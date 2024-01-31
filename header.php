@@ -8,7 +8,7 @@ if ((!isset($_SESSION["status"])) && ($_SESSION["status"] != "loggedIn")){
     echo <<<EOT
             <div id="loginCon" class="popup-container border">
 
-                            <h3>Welcome to the Chat Room</h3>
+                            <h3>Health Advice Group</h3>
 
 
                             <form class="form" id="form" name="form" action="login.php" method="post">
