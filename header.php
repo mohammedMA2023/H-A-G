@@ -1,8 +1,7 @@
 <?php
 session_start();
 $auth_opt = "";
-if ((!isset($_SESSION["status"])) && ($_SESSION["status"] != "loggedIn")){
-    echo '<script type="module" src="js/scripts.js"></script>';
+if ((!isset($_SESSION["status"])) || ($_SESSION["status"] != "loggedIn")){
     $auth_opt = '<li><button id="show-login" class="dropdown-item">Login/Register</button></li> 
     ';
     echo <<<EOT

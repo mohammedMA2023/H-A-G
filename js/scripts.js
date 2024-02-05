@@ -67,29 +67,21 @@ class Dashboard {
             .catch(error => console.error(error));
     }
 
-    updateWeather() {
+    async updateWeather() {
         var locationInput = document.getElementById('locationInput').value;
-
         var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
-
-        fetch(weatherEndpoint)
-            .then(response => response.json())
-            .then(data => {
+    let response = await fetch(weatherEndpoint);
+    let data = await response.json();
                 var temperature = Math.round(data.main.temp - 273.15); // Convert Kelvin to Celsius
                 var weatherDescription = data.weather[0].description;
-                document.getElementById('weatherData').innerHTML = temperature + '°C';
-                document.getElementById('weatherInfo').innerHTML = 'Weather: ' + weatherDescription;
-            })
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-                document.getElementById('weatherData').innerHTML = 'Error';
-            });
-    }
+                return [temperature,weatherDescription];
+           }
+           
 
     async getCoordinates() {
         var locationInput = document.getElementById('locationInput').value;
         var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
-        let response = await fetch(nominatimEndpoint)
+        let response = await fetch(nominatimEndpoint);
         let data = await response.json();
         var latitude = data[0].lat;
 
@@ -121,29 +113,42 @@ class Dashboard {
     .catch(error => console.error(error));
 }
 // Define a function to get the current air quality level
-getAirQuality() {
-  // Define the API endpoint with the parameters
-  let lat = this.lat;
+async fetchAQ(){ 
+    let lat = this.lat;
   let lon = this.long;
   let url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=4c80fc5796594d96d997ae47b1620de4`;
   // Use fetch to send a GET request to the API
-  fetch(url)
-    .then((response) => response.json()) // Parse the JSON response
-    .then((data) => {
-      // Extract the AQI value from the data
+  let response = await fetch(url)
+  let data = await response.json();
+
       let aqi = data.list[0].components.pm10;
-      // Display the AQI value in the console
-      document.getElementById("airQualityData").innerHTML = aqi;
+      return aqi;
+    }
+    showWeather(){
+        this.()
+    .then(aqi => {
+    document.getElementById("airQualityData").innerHTML = aqi;
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
       document.getElementById("spinner-container").style.display = "none";
             document.getElementById("all-content").style.display = "block";
 
-    })
-    .catch((error) => {
-      // Handle any errors
-      console.error(error);
-    });
+            
+})
+
+
     }
+getAirQuality() {
+    this.fetch()
+    .then(aqi => {
+    document.getElementById("airQualityData").innerHTML = aqi;
+      document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
+      document.getElementById("spinner-container").style.display = "none";
+            document.getElementById("all-content").style.display = "block";
+
+            
+})
+    
+}
   getPM10Description(pm10) {
   if (pm10 <= 50) return 'Good';
   if (pm10 <= 100) return 'Moderate';
@@ -151,6 +156,13 @@ getAirQuality() {
   if (pm10 <= 350) return 'Unhealthy';
   if (pm10 <= 430) return 'Very Unhealthy';
   return 'Hazardous';
+}
+showTable(){
+    let table = document.getElementById("datatableSimple");
+         
+
+
+
 }
 
 
