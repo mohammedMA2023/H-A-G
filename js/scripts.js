@@ -39,7 +39,7 @@ class Dashboard {
 
     updateDash(){
         this.getAirQuality();
-           this.updateWeather();
+           this.showWeather();
            
         
         
@@ -72,10 +72,10 @@ class Dashboard {
         var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
     let response = await fetch(weatherEndpoint);
     let data = await response.json();
-                var temperature = Math.round(data.main.temp - 273.15); // Convert Kelvin to Celsius
-                var weatherDescription = data.weather[0].description;
-                return [temperature,weatherDescription];
-           }
+    var temperature = Math.round(data.main.temp - 273.15); // Convert Kelvin to Celsius
+    var weatherDescription = data.weather[0].description;
+    return [temperature,weatherDescription];
+   }
            
 
     async getCoordinates() {
@@ -125,20 +125,16 @@ async fetchAQ(){
       return aqi;
     }
     showWeather(){
-        this.()
-    .then(aqi => {
-    document.getElementById("airQualityData").innerHTML = aqi;
-      document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
-      document.getElementById("spinner-container").style.display = "none";
-            document.getElementById("all-content").style.display = "block";
-
-            
+        this.updateWeather()
+    .then(weatherData => {
+    document.getElementById("weatherData").innerHTML = weatherData[0];
+      document.getElementById("weatherInfo").innerHTML = weatherData[1];
 })
 
 
     }
 getAirQuality() {
-    this.fetch()
+    this.fetchAQ()
     .then(aqi => {
     document.getElementById("airQualityData").innerHTML = aqi;
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
@@ -158,14 +154,26 @@ getAirQuality() {
   return 'Hazardous';
 }
 showTable(){
+    let majorCities = var cities = [
+  ["New York", "US"],
+  ["Tokyo", "JP"],
+  ["London", "GB"],
+  ["Paris", "FR"],
+  ["Beijing", "CN"],
+  ["Sydney", "AU"],
+  ["Cairo", "EG"],
+  ["Rio de Janeiro", "BR"],
+  ["Moscow", "RU"],
+  ["Cape Town", "ZA"]
+];
+
     let table = document.getElementById("datatableSimple");
-         
 
+    for (index in majorCities){
+        let temp = this.
 
-
-}
-
-
+    }
+    }
 }
 function showLogin(){
     document.getElementById("popup-container").style.display = "none";
