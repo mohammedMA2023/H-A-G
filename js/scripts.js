@@ -18,6 +18,7 @@ class Dashboard {
         document.getElementById("close-model").onclick = this.closeModel.bind(this);
         this.long = "";
         this.lat = "";
+        this.loc = "";
         
         
     }
@@ -30,16 +31,21 @@ class Dashboard {
         setInterval(this.updateDash.bind(this), 5000);
         this.getCoordinates()
         .then(() => {
+            
            this.getForecast();
            this.getAQ();
-        
-    })    
+            this.showTable();
+            document.getElementById("spinner-container").style.display = "none";
+            document.getElementById("all-content").style.display = "block";
+
+        })    
     
     }
 
     updateDash(){
         this.getAirQuality();
-           this.showWeather();
+        this.loc = document.getElementById('locationInput').value;
+        this.showWeather();
            
         
         
@@ -68,7 +74,7 @@ class Dashboard {
     }
 
     async updateWeather() {
-        var locationInput = document.getElementById('locationInput').value;
+        var locationInput = this.loc;
         var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
     let response = await fetch(weatherEndpoint);
     let data = await response.json();
@@ -80,7 +86,7 @@ class Dashboard {
 
     async getCoordinates() {
         var locationInput = document.getElementById('locationInput').value;
-        var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
+        var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.loc)}`;
         let response = await fetch(nominatimEndpoint);
         let data = await response.json();
         var latitude = data[0].lat;
@@ -116,6 +122,7 @@ class Dashboard {
 async fetchAQ(){ 
     let lat = this.lat;
   let lon = this.long;
+
   let url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=4c80fc5796594d96d997ae47b1620de4`;
   // Use fetch to send a GET request to the API
   let response = await fetch(url)
@@ -138,9 +145,7 @@ getAirQuality() {
     .then(aqi => {
     document.getElementById("airQualityData").innerHTML = aqi;
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
-      document.getElementById("spinner-container").style.display = "none";
-            document.getElementById("all-content").style.display = "block";
-
+      
             
 })
     
@@ -154,7 +159,7 @@ getAirQuality() {
   return 'Hazardous';
 }
 showTable(){
-    let majorCities = var cities = [
+    let majorCities = [
   ["New York", "US"],
   ["Tokyo", "JP"],
   ["London", "GB"],
@@ -168,12 +173,61 @@ showTable(){
 ];
 
     let table = document.getElementById("datatableSimple");
+    let tableContents = ``;
+    tableContents += `
+    <thead>
+    <tr>
+        <th>Location</th>
+        <th>Weather</th>
+        <th>Air Quality (PM10)</th>
 
+    </tr>
+</thead>
+<tfoot>
+    <tr>
+    <th>Location</th>
+    <th>Weather</th>
+    <th>Air Quality (PM10)</th>
+
+    </tr>
+</tfoot>
+<tbody>
+    `;
+
+    
     for (index in majorCities){
-        let temp = this.
-
+        this.loc = majorCities[index][0] + "," + majorCities[index][1];
+        let tempData = this.updateWeather();
+        let temp = tempData[0];
+        let tempDesc = tempData[1];
+       
+        this.getCoordinates()
+    .then(coordinates => this.fetchAQ(coordinates)) // Pass coordinates to fetchAQ
+    .then(aqi => {
+        
+        tableContents += `
+                <tr>
+                <td>` + majorCities[index] + `</td>
+                <td>` + temp + "(" + tempDesc + ")" + `</td>
+                <td>` + aqi + `</td>
+                
+                </tr>
+        `;
+        
+    });
+    
+        
+    
     }
-    }
+    tableContents += `
+        </tbody>
+        </table>
+    
+    `;
+table.innerHTML = tableContents;    
+this.loc = document.getElementById("locationInput");
+    
+}
 }
 function showLogin(){
     document.getElementById("popup-container").style.display = "none";
@@ -192,6 +246,7 @@ function changeUi() {
         document.forms["form"]["auth"].value ="login";
         document.forms["form"]["sub"].innerHTML = "Log In";
         document.querySelector("#login-reg").innerHTML= "Don't have an account? Register...";
+        
     }
 }
 
