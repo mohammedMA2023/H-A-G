@@ -174,7 +174,7 @@ async showTable() {
 
     let table = document.getElementById("tableData");
     let tableContents = `
-    <table id="datatablesSimple">    
+    <table id='datatablesSimple'>
     <thead>
             <tr>
                 <th>Location</th>
@@ -203,7 +203,7 @@ async showTable() {
                 <tr>
                     <td>${majorCities[index]}</td>
                     <td>${temp} (${tempDesc})</td>
-                    <td>${aqi}</td>
+                    <td>${aqi} (${this.getPM10Description(aqi)})</td>
                 </tr>
             `;
         }
