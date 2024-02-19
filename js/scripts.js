@@ -35,9 +35,7 @@ class Dashboard {
            this.getForecast();
            this.getAQ();
             this.showTable();
-            document.getElementById("spinner-container").style.display = "none";
-            document.getElementById("all-content").style.display = "block";
-
+           
         })    
     
     }
@@ -184,19 +182,13 @@ async showTable() {
                 <th>Air Quality (PM10)</th>
             </tr>
         </thead>
-        <tfoot>
-            <tr>
-                <th>Location</th>
-                <th>Weather</th>
-                <th>Air Quality (PM10)</th>
-            </tr>
-        </tfoot>
+       
         <tbody>
     `;
-
-    try {
-        for (let index in majorCities) {
-            this.loc = majorCities[index][0] + "," + majorCities[index][1];
+    let oldLoc = document.getElementById('locationInput').value;
+    try {    
+    for (let index in majorCities) {
+            document.getElementById('locationInput').value = majorCities[index][0] + "," + majorCities[index][1];
 
             // Call getCoordinates first to ensure we have latitude and longitude
             await this.getCoordinates();
@@ -222,13 +214,38 @@ async showTable() {
     tableContents += `</tbody></table>`;
     table.innerHTML = tableContents;
     this.loc = document.getElementById("locationInput");
-}
+    document.getElementById("locationInput").value = oldLoc;
+    this.showWeather();
+    document.getElementById("spinner-container").style.display = "none";
+    document.getElementById("all-content").style.display = "block";
 
 }
 
+}
 
 
 
+
+// Function to show login
+function showLogin() {
+    document.getElementById("popup-container").style.display = "none";
+    document.getElementById("loginCon").style.display = "block";
+}
+
+// Function to toggle UI
+function changeUi() {
+    if (document.forms["form"]["auth"].value == "login") {
+        document.getElementById("username").style.display = "block";
+        document.forms["form"]["auth"].value = "reg";
+        document.forms["form"]["sub"].innerHTML = "Register";
+        document.querySelector("#login-reg").innerHTML = "Already have an account? Log In...";
+    } else if (document.forms["form"]["auth"].value == "reg") {
+        document.getElementById("username").style.display = "none";
+        document.forms["form"]["auth"].value = "login";
+        document.forms["form"]["sub"].innerHTML = "Log In";
+        document.querySelector("#login-reg").innerHTML = "Don't have an account? Register...";
+    }
+}
 
 window.addEventListener('DOMContentLoaded', event => {
     let dash = new Dashboard();
