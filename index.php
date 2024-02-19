@@ -231,9 +231,7 @@
                                 DataTable Example
                             </div>
                             <div id="tableData" class="card-body">
-                                <table id="datatablesSimple">
-                                    
-                                </table>
+                                
                             </div>
                         </div>
                     </div>

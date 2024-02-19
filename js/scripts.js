@@ -43,8 +43,8 @@ class Dashboard {
     }
 
     updateDash(){
+        
         this.getAirQuality();
-        this.loc = document.getElementById('locationInput').value;
         this.showWeather();
            
         
@@ -74,7 +74,7 @@ class Dashboard {
     }
 
     async updateWeather() {
-        var locationInput = this.loc;
+        var locationInput = document.getElementById('locationInput').value;
         var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
     let response = await fetch(weatherEndpoint);
     let data = await response.json();
@@ -86,7 +86,7 @@ class Dashboard {
 
     async getCoordinates() {
         var locationInput = document.getElementById('locationInput').value;
-        var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.loc)}`;
+        var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
         let response = await fetch(nominatimEndpoint);
         let data = await response.json();
         var latitude = data[0].lat;
@@ -94,9 +94,11 @@ class Dashboard {
         var longitude = data[0].lon;
         this.long = longitude;
         this.lat = latitude;
+        return "done";
     }
     getAQ() {
-  const latitude = this.lat; // Replace with the latitude of the location you want to check
+        
+        const latitude = this.lat; // Replace with the latitude of the location you want to check
   const longitude = this.long; // Replace with the longitude of the location you want to check
   const hourly = 'pm10,pm2_5'; // Replace with the hourly air quality variables you are interested in
   const today = new Date().toISOString().slice(0, 10); // Get today's date in ISO format
@@ -158,96 +160,70 @@ getAirQuality() {
   if (pm10 <= 430) return 'Very Unhealthy';
   return 'Hazardous';
 }
-showTable(){
+async showTable() {
     let majorCities = [
-  ["New York", "US"],
-  ["Tokyo", "JP"],
-  ["London", "GB"],
-  ["Paris", "FR"],
-  ["Beijing", "CN"],
-  ["Sydney", "AU"],
-  ["Cairo", "EG"],
-  ["Rio de Janeiro", "BR"],
-  ["Moscow", "RU"],
-  ["Cape Town", "ZA"]
-];
+        ["New York", "US"],
+        ["Tokyo", "JP"],
+        ["London", "GB"],
+        ["Paris", "FR"],
+        ["Beijing", "CN"],
+        ["Sydney", "AU"],
+        ["Cairo", "EG"],
+        ["Rio de Janeiro", "BR"],
+        ["Moscow", "RU"],
+        ["Cape Town", "ZA"]
+    ];
 
-    let table = document.getElementById("datatableSimple");
-    let tableContents = ``;
-    tableContents += `
+    let table = document.getElementById("tableData");
+    let tableContents = `
+    <table id="datatablesSimple">    
     <thead>
-    <tr>
-        <th>Location</th>
-        <th>Weather</th>
-        <th>Air Quality (PM10)</th>
-
-    </tr>
-</thead>
-<tfoot>
-    <tr>
-    <th>Location</th>
-    <th>Weather</th>
-    <th>Air Quality (PM10)</th>
-
-    </tr>
-</tfoot>
-<tbody>
+            <tr>
+                <th>Location</th>
+                <th>Weather</th>
+                <th>Air Quality (PM10)</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Location</th>
+                <th>Weather</th>
+                <th>Air Quality (PM10)</th>
+            </tr>
+        </tfoot>
+        <tbody>
     `;
 
-    
-    for (index in majorCities){
-        this.loc = majorCities[index][0] + "," + majorCities[index][1];
-        let tempData = this.updateWeather();
-        let temp = tempData[0];
-        let tempDesc = tempData[1];
-       
-        this.getCoordinates()
-    .then(coordinates => this.fetchAQ(coordinates)) // Pass coordinates to fetchAQ
-    .then(aqi => {
-        
-        tableContents += `
+    try {
+        for (let index in majorCities) {
+            this.loc = majorCities[index][0] + "," + majorCities[index][1];
+
+            // Call getCoordinates first to ensure we have latitude and longitude
+            await this.getCoordinates();
+            
+            let tempData = await this.updateWeather();
+            let temp = tempData[0];
+            let tempDesc = tempData[1];
+
+            let aqi = await this.fetchAQ();
+
+            tableContents += `
                 <tr>
-                <td>` + majorCities[index] + `</td>
-                <td>` + temp + "(" + tempDesc + ")" + `</td>
-                <td>` + aqi + `</td>
-                
+                    <td>${majorCities[index]}</td>
+                    <td>${temp} (${tempDesc})</td>
+                    <td>${aqi}</td>
                 </tr>
-        `;
-        
-    });
-    
-        
-    
+            `;
+        }
+    } catch (error) {
+        console.error('Error:', error);
     }
-    tableContents += `
-        </tbody>
-        </table>
-    
-    `;
-table.innerHTML = tableContents;    
-this.loc = document.getElementById("locationInput");
-    
-}
-}
-function showLogin(){
-    document.getElementById("popup-container").style.display = "none";
-    document.getElementById("loginCon").style.display = "block";
 
-
+    tableContents += `</tbody></table>`;
+    table.innerHTML = tableContents;
+    this.loc = document.getElementById("locationInput");
 }
-function changeUi() {
-    if (document.forms["form"]["auth"].value == "login") {
-        document.getElementById("username").style.display = "block";
-        document.forms["form"]["auth"].value ="reg";
-        document.forms["form"]["sub"].innerHTML ="Register";
-        document.querySelector("#login-reg").innerHTML = "Already have an account? Log In...";
-    } else if (document.forms["form"]["auth"].value == "reg") {
-        document.getElementById("username").style.display = "none";
-        document.forms["form"]["auth"].value ="login";
-        document.forms["form"]["sub"].innerHTML = "Log In";
-        document.querySelector("#login-reg").innerHTML= "Don't have an account? Register...";
-        
-    }
+
 }
 
 
