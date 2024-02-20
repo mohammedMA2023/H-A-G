@@ -34,7 +34,9 @@ class Dashboard {
             
            this.getForecast();
            this.getAQ();
-            this.showTable();
+           this.fetchPollen(); 
+           this.getPOP();
+           this.showTable();
            
         })    
     
@@ -131,10 +133,36 @@ async fetchAQ(){
       let aqi = data.list[0].components.pm10;
       return aqi;
     }
+    async getPOP(){
+        const apiKey = '4c80fc5796594d96d997ae47b1620de4'; // Replace with your OpenWeatherMap API key
+const city = document.getElementById("locationInput").value; // Replace with your desired city
+let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+let response = await fetch(url);
+  let data = await response.json();
+  document.getElementById("windSpeed").innerHTML = data.wind.speed + " m/s";
+      }
+    async fetchPollen(){ 
+       let particulate_param = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${this.lat}&longitude=${this.long}&hourly=pm10,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen`
+
+       let response = await fetch(particulate_param);
+       let data = await response.json();
+       let sum = 0;
+       
+       
+              for (let index in data['hourly']['alder_pollen'].slice(0,24)){
+                                                    // alert(JSON.stringify(data['hourly']['alder_pollen'][index]));
+                                                    sum += data['hourly']['alder_pollen'][index];
+                                                                                                      
+                                                    }
+                                                    document.getElementById("pollenData").innerHTML = Math.round(sum * 100) / 100 + " µg/m³";
+
+                                                
+                                             }
     showWeather(){
         this.updateWeather()
     .then(weatherData => {
-    document.getElementById("weatherData").innerHTML = weatherData[0];
+    document.getElementById("weatherData").innerHTML = weatherData[0] + " °C";
       document.getElementById("weatherInfo").innerHTML = weatherData[1];
 })
 
@@ -143,7 +171,7 @@ async fetchAQ(){
 getAirQuality() {
     this.fetchAQ()
     .then(aqi => {
-    document.getElementById("airQualityData").innerHTML = aqi;
+    document.getElementById("airQualityData").innerHTML = aqi + " µg/m³";
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
       
             
@@ -174,7 +202,7 @@ async showTable() {
 
     let table = document.getElementById("tableData");
     let tableContents = `
-    <table id='datatablesSimple'>
+    <table id='datatablesSimple' class="card-body">
     <thead>
             <tr>
                 <th>Location</th>
@@ -246,6 +274,7 @@ function changeUi() {
         document.querySelector("#login-reg").innerHTML = "Don't have an account? Register...";
     }
 }
+
 
 window.addEventListener('DOMContentLoaded', event => {
     let dash = new Dashboard();

@@ -149,20 +149,19 @@
 
 
            <div class="card">
-               <h2 class="text-warning">Pollen Levels</h2>
-               <div class="data pollen" id="pollenData">High</div>
+               <h2 class="text-warning">Pollen Levels (Alder)</h2>
+               <div class="data pollen" id="pollenData">...</div>
                <div class="additional-info text-muted" id="pollenInfo">
-                   <p>Last Updated: 2024-01-22 12:30 PM</p>
+                   
                </div>
            </div>
 
 
            <div class="card">
-               <h2 class="text-danger">Rain Forecast</h2>
-               <div class="data rain-forecast" id="rainForecastData">60%</div>
+               <h2 class="text-danger">Wind Speed</h2>
+               <div class="data rain-forecast" id="windSpeed">...</div>
                <div class="additional-info text-muted" id="rainForecastInfo">
-                   <p>Last Updated: 2024-01-22 12:30 PM</p>
-               </div>
+                       </div>
            </div>
        </div>
    </div>
@@ -235,7 +234,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                
+</main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
