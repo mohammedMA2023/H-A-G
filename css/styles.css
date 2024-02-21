@@ -10,15 +10,7 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
-
-
-    /* Custom styling for the spinner */
-    #button-container {
-      display: flex;
-      justify-content: flex-end; /* Aligns button to right */
-      align-items: flex-start; /* Aligns button to top */
-    }
-    
+ 
     #loginCon{
       display:none;
       

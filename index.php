@@ -229,7 +229,7 @@
                                 <i class="fas fa-table me-1"></i>
                                 DataTable Example
                             </div>
-                            <div id="tableData" class="card-body">
+                            <div id="tableData"s>
                                 
                             </div>
                         </div>

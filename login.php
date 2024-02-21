@@ -35,7 +35,7 @@ session_start();
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbName = "login_db";
+    $dbName = "dash";
     $dbTable = "users";
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbName);

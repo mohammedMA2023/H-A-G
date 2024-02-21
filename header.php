@@ -27,6 +27,13 @@ if ((!isset($_SESSION["status"])) || ($_SESSION["status"] != "loggedIn")){
                                     <input name="password" type="password" id="password" required>
                                 </div>
                                 <br>
+                                <div class="input-group" id="loc" style="display:none">
+                                <label for="location">Allow us to use your location to display data?</label>
+                                        
+                                <input class="checkbox" id="location" type="checkbox" name="location" value="Allow us to use your location...">
+                                
+                                </div>
+                                <br>
                                 <button type="submit" name="sub" id="sub" class="btn btn-success btn-lg btn-block">Log In</button>
                                 <button id="login-reg" name="login-reg" type="button" class="btn btn-secondary btn-lg btn-block mt-3" onclick="changeUi()">Don't have an account? Register...</button>
                             </form>
