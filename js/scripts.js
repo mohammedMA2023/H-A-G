@@ -9,6 +9,7 @@
 
 import { showGraph } from '../assets/demo/chart-area-demo.js';
 import { showBarGraph } from '../assets/demo/chart-bar-demo.js';
+import { dispTable } from '../js/datatables-simple-demo.js';
 
 // ... (your imports)
 class Dashboard {
@@ -133,15 +134,7 @@ async fetchAQ(){
       let aqi = data.list[0].components.pm10;
       return aqi;
     }
-    async getPOP(){
-        const apiKey = '4c80fc5796594d96d997ae47b1620de4'; // Replace with your OpenWeatherMap API key
-const city = document.getElementById("locationInput").value; // Replace with your desired city
-let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-
-let response = await fetch(url);
-  let data = await response.json();
-  document.getElementById("windSpeed").innerHTML = data.wind.speed + " m/s";
-      }
+   
     async fetchPollen(){ 
        let particulate_param = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${this.lat}&longitude=${this.long}&hourly=pm10,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen`
 
@@ -164,6 +157,15 @@ let response = await fetch(url);
     .then(weatherData => {
     document.getElementById("weatherData").innerHTML = weatherData[0] + " °C";
       document.getElementById("weatherInfo").innerHTML = weatherData[1];
+      async getPOP(){
+        const apiKey = '4c80fc5796594d96d997ae47b1620de4'; // Replace with your OpenWeatherMap API key
+const city = document.getElementById("locationInput").value; // Replace with your desired city
+let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+let response = await fetch(url);
+  let data = await response.json();
+  document.getElementById("windSpeed").innerHTML = data.wind.speed + " m/s";
+      }
 })
 
 
@@ -202,7 +204,7 @@ async showTable() {
 
     let table = document.getElementById("tableData");
     let tableContents = `
-    <table id='datatablesSimple' class="card-body">
+    <table id='datatablesSimple'>
     <thead>
             <tr>
                 <th>Location</th>
@@ -244,6 +246,7 @@ async showTable() {
     this.loc = document.getElementById("locationInput");
     document.getElementById("locationInput").value = oldLoc;
     this.showWeather();
+    dispTable();
     document.getElementById("spinner-container").style.display = "none";
     document.getElementById("all-content").style.display = "block";
 
