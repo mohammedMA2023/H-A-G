@@ -42,8 +42,8 @@ class Dashboard {
      }
 
     updateDash(){
-        this.getAirQuality();
-        this.showWeather();
+        this.dispWeatherAndAQ();
+
     }
 
     getForecast() {
@@ -59,17 +59,6 @@ class Dashboard {
           })
           .catch(error => console.error(error));
       }
-      
-    async updateWeather() {
-        var locationInput = document.getElementById('locationInput').value;
-        var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
-            let response = await fetch(weatherEndpoint);
-            let data = await response.json();
-        var temperature = Math.round(data.main.temp - 273.15); // Convert Kelvin to Celsius
-        var weatherDescription = data.weather[0].description;
-    return [temperature,weatherDescription,data.wind.speed];
-   }
-
     async getCoordinates() {
         var locationInput = document.getElementById('locationInput').value;
         var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
@@ -98,16 +87,16 @@ class Dashboard {
     .catch(error => console.error(error));
 }
 
-async fetchAQ(){ // Define a function to get the current air quality level
+async fetchWeatherAndAQ(){ // Define a function to get the current air quality level
     let lat = this.lat;
     let lon = this.long;
-    let url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=4c80fc5796594d96d997ae47b1620de4`;
-// Use fetch to send a GET request to the API
-    let response = await fetch(url)
-    let data = await response.json();
-    let aqi = data.list[0].components.pm10;
-    return aqi;
-        }
+    var url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily&appid=4c80fc5796594d96d997ae47b1620de4`;
+    const temperature = data.current.temp;
+    const windSpeed = data.current.wind_speed;
+    const weatherDescription = data.current.weather[0].description;
+    const pm10 = data.current.air_pollution.list[0].components.pm10;
+    return [temperature,weatherDescription,windSpeed,pm10,this.getPM10Description(pm10)]
+    }
     async fetchPollen(){ 
        let particulate_param = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${this.lat}&longitude=${this.long}&hourly=pm10,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen`
        let response = await fetch(particulate_param);
@@ -119,24 +108,16 @@ async fetchAQ(){ // Define a function to get the current air quality level
         }
     document.getElementById("pollenData").innerHTML = Math.round(sum * 100) / 100 + " µg/m³";
         }
-    
-    showWeather(){
-        this.updateWeather()
-    .then(weatherData => {
-    document.getElementById("weatherData").innerHTML = weatherData[0] + " °C";
-      document.getElementById("weatherInfo").innerHTML = weatherData[1];
-      document.getElementById("windSpeed").innerHTML = weatherData[2] + 'm/s';    
-    })
-}
+dispWeatherAndAQ() {
+    this.fetchWeatherAndAQ()
+    .then(data => {
+    document.getElementById("airQualityData").innerHTML = data[3] + " µg/m³";
+      document.getElementById("aq-desc").innerHTML = data[4];
+      document.getElementById("weatherData").innerHTML = data[0] + " °C";
+      document.getElementById("weatherInfo").innerHTML = data[1];
+      document.getElementById("windSpeed").innerHTML = data[2] + 'm/s';
 
-getAirQuality() {
-    this.fetchAQ()
-    .then(aqi => {
-    document.getElementById("airQualityData").innerHTML = aqi + " µg/m³";
-      document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
-           
 })
-    
 }
   getPM10Description(pm10) {
   if (pm10 <= 50) return 'Good';
