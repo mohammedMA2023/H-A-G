@@ -18,13 +18,14 @@ class LoadingScreen {
 }
 class Dashboard {
     constructor() {
-        document.getElementById("all-content").style.display = "none";
-        document.getElementById("close-model").onclick = this.closeModel.bind(this);
         this.long = "";
         this.lat = "";
         this.loc = "";
         this.load = new LoadingScreen();
+        this.times = ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00']
+
     }
+
 
     closeModel = () => {
         document.getElementById("popup-container").style.display = "none";
@@ -51,7 +52,8 @@ class Dashboard {
           .then(response => response.json())
           .then(data => {
             const hourlyData = data.hourly.time;
-            this.times = hourlyData.map(dateTimeString => new Date(Date.parse(dateTimeString)).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+            //this.times = hourlyData.map(dateTimeString => new Date(Date.parse(dateTimeString)).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
+            //alert(JSON.stringify(this.times));
             const temperatures = data.hourly["temperature_2m"];
             showGraph(this.times, temperatures);
           })
@@ -89,7 +91,7 @@ class Dashboard {
     fetch(url)
     .then(response => response.json())
     .then(data => {
-        alert(JSON.stringify(this.times));
+
         showBarGraph(this.times, data.hourly["pm10"]);
 
     })
