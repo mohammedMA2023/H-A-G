@@ -119,7 +119,7 @@
         <p class="loading-text">Fetching data...</p>
     </div>
 
-    <div id="all-content" style="display:none;">
+    <div id="all-content">
         <div class="row">
             <div class="dashboard">
                 <div class="card">
