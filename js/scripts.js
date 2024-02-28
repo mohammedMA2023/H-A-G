@@ -90,7 +90,9 @@ class Dashboard {
 async fetchWeatherAndAQ(){ // Define a function to get the current air quality level
     let lat = this.lat;
     let lon = this.long;
-    var url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily&appid=4c80fc5796594d96d997ae47b1620de4`;
+    var url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily&appid=251cb7b7b109503a79d12b2152788acf`;
+    let response = await fetch(url);
+    data = response.json();
     const temperature = data.current.temp;
     const windSpeed = data.current.wind_speed;
     const weatherDescription = data.current.weather[0].description;
@@ -158,15 +160,15 @@ async showTable() {
     for (let index in majorCities) {
             document.getElementById('locationInput').value = majorCities[index][0] + "," + majorCities[index][1];
             await this.getCoordinates(); // Call getCoordinates first to ensure we have latitude and longitude
-            let tempData = await this.updateWeather();
+            let tempData = await this.fetchWeatherAndAQ();
             let temp = tempData[0];
             let tempDesc = tempData[1];
-            let aqi = await this.fetchAQ();
+            let aqi = tempData[3];
             tableContents += `
                 <tr>
                     <td>${majorCities[index]}</td>
                     <td>${temp} (${tempDesc})</td>
-                    <td>${aqi} (${this.getPM10Description(aqi)})</td>
+                    <td>${aqi} (${tempData[4]})</td>
                 </tr>
             `;
         }
