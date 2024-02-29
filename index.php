@@ -90,7 +90,7 @@
                 <div id="layoutSidenav_content">
                     <main>
                     <div id="button-container">
-        <button onclick="document.getElementById('popup-container').style.display = 'block'" class="border" style="width:20%;" id="showLocCon">Click Me!</button>
+        <button onclick="document.getElementById('popup-container').style.display = 'block'" class="border" style="width:20%;" id="showLocCon">enter a new location...</button>
     </div>
 
     <div class="container-fluid px-4">
@@ -176,9 +176,14 @@
                 <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
             </div>
         </div>
+
+    </div>
+    <div class="card"  style="text-align:center;">
+    <button id="ShowTable" class="row">test</button>
     </div>
 
             <div class="card mb-4">
+
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
                     Forecasts in Major Cities 
