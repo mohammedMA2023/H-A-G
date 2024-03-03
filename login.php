@@ -1,25 +1,50 @@
 <?php
 session_start();
-    $header = "";
-    // Logging code
-    // Get the type of request (GET or POST).
-    date_default_timezone_set("Europe/London");
-    function assessPasswordSecurity($password) {
+class DB(){
+    public function __construct(){
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbName = "dash";
+        $dbTable = "users";
+        $this->conn = new mysqli($servername, $username, $password, $dbName);
+        if ($this->conn->connect_error) {;
+            die();
+        }
+    }
+    public closeConn(){
+        $this->conn->close();
+    }
+    public getConn(){
+        return $this->conn;
+    }
+}
+
+class Auth(){
+    public function __construct(){
+        $db = new DB();
+        $this->conn = $db->getConn();
+        $this->header = "";
+        $this->uPass = $_POST["password"];
+        $this->uName = $_POST["userid"];
+
+    }
+    public function login(){
+
+    }
+    public function assessPasswordSecurity($password) {
         // Check if the password contains at least 8 characters
         if (strlen($password) < 8) {
             return "Password must be at least 8 characters long.";
         }
-    
         // Check if the password contains at least one uppercase letter
         if (!preg_match('/[A-Z]/', $password)) {
             return "Password must contain at least one uppercase letter.";
         }
-    
         // Check if the password contains at least one lowercase letter
         if (!preg_match('/[a-z]/', $password)) {
             return "Password must contain at least one lowercase letter.";
         }
-    
         // Check if the password contains at least one digit
         if (!preg_match('/[0-9]/', $password)) {
             return "Password must contain at least one digit.";
@@ -28,7 +53,72 @@ session_start();
         if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
             return "Password must contain at least one special character.";
         }
-    
+
+        // Password is secure
+        return null;
+    }
+    public function getUsers(){
+        $stmt = $conn->prepare("SELECT * FROM $dbTable WHERE email = ?");
+        $stmt->bind_param("s", $uName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
+    }
+    public function verifyPassword(){
+        $result = $this->getUsers();
+        if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $storedHashedPassword = $row["password"];
+            if ((password_verify($this->uPass, $storedHashedPassword)) && ($this->uName == $row["email"]) ) {
+                $status = "loggedIn";
+                $this->header = "index.php";
+                $newUserID = $row["user_id"];
+                if (!isset($_SESSION["userid"])){
+                    $_SESSION["userid"] = json_encode(array($newUserID,$row["username"]));
+                    echo $_SESSION["userid"];
+                }
+
+} else {
+                $status = "loggedOut";
+                $_SESSION['error'] = "Error: these details are incorrect. Please try again.";
+                $header = "index.php";
+			}
+    }
+    } else {
+        $status = "loggedOut";
+        $_SESSION['error'] = "Error: these details are incorrect. Please try again.";
+        $header = "index.php";
+	}
+    break;
+    }
+
+}
+    $header = "";
+    function assessPasswordSecurity($password) {
+        // Check if the password contains at least 8 characters
+        if (strlen($password) < 8) {
+            return "Password must be at least 8 characters long.";
+        }
+
+        // Check if the password contains at least one uppercase letter
+        if (!preg_match('/[A-Z]/', $password)) {
+            return "Password must contain at least one uppercase letter.";
+        }
+
+        // Check if the password contains at least one lowercase letter
+        if (!preg_match('/[a-z]/', $password)) {
+            return "Password must contain at least one lowercase letter.";
+        }
+
+        // Check if the password contains at least one digit
+        if (!preg_match('/[0-9]/', $password)) {
+            return "Password must contain at least one digit.";
+        }
+        // Check if the password contains at least one special character
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            return "Password must contain at least one special character.";
+        }
+
         // Password is secure
         return null;
     }
@@ -42,7 +132,7 @@ session_start();
     if ($conn->connect_error) {;
             die();
     }
-    
+
     $uPass = $_POST["password"];
 // Hash the entered password
     $hashedPassword = password_hash($uPass, PASSWORD_BCRYPT);
@@ -86,7 +176,7 @@ session_start();
     case "reg":
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $password = $_POST["password"];
-            
+
             // Assess password security
             $securityError = assessPasswordSecurity($password);
             if ($securityError !== null) {
@@ -99,7 +189,7 @@ session_start();
         $email = $_POST["userid"];
         $password = $_POST["password"];
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        
+
         // Check if the email already exists in the database
         $stmt = $conn->prepare("SELECT email FROM $dbTable WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -123,8 +213,8 @@ session_start();
 
                     $_SESSION["userid"] = json_encode(array($newUserId,$u));
             }
-        }       
-            }           
+        }
+            }
     break;
 case "logout":
     echo "logout";
