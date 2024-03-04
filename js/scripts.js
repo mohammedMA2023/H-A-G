@@ -62,7 +62,7 @@ class Dashboard {
                 <tr>
                     <td>${majorCities[index]}</td>
                     <td>${temp} (${tempDesc})</td>
-                    <td>${aqi} testtt</td>
+                    <td>${aqi}</td>
                 </tr>
             `;
         }
