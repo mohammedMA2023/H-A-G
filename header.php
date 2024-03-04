@@ -63,5 +63,10 @@ else{
         </ul>
         </li> 
         </ul> 
-        </nav></section>';
+        </nav>
+        <br>
+        <br>
+        <br>
+        <br>
+        </section>';
 ?>

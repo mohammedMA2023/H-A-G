@@ -62,7 +62,7 @@ class Dashboard {
                 <tr>
                     <td>${majorCities[index]}</td>
                     <td>${temp} (${tempDesc})</td>
-                    <td>${aqi} (${this.getPM10Description(aqi)})</td>
+                    <td>${aqi} testtt</td>
                 </tr>
             `;
         }
