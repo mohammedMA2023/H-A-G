@@ -49,10 +49,9 @@ class Dashboard {
         </thead>
         <tbody>
     `;
-    let oldLoc = document.getElementById('locationInput').value;
     try {
     for (let index in majorCities) {
-            await this.changeLoc(majorCities[index]);
+            this.changeLoc(majorCities[index]);
             await this.getCoordinates(); // Call getCoordinates first to ensure we have latitude and longitude
             let tempData = await this.updateWeather();
             let temp = tempData[0];
@@ -69,10 +68,8 @@ class Dashboard {
     } catch (error) {
         console.error('Error:', error);
         }
-
     tableContents += `</tbody></table>`;
     table.innerHTML = tableContents;
-    this.loc = oldLoc;
     dispTable();
     }
     }
