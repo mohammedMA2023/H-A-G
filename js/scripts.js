@@ -40,14 +40,16 @@ class Dashboard {
     let table = document.getElementById("t-bdy");
     let tableContents = "";
     try {
+    dispTable();
     for (let index in majorCities) {
-            this.changeLoc(majorCities[index]);
+            await this.changeLoc(majorCities[index]);
             await this.getCoordinates(); // Call getCoordinates first to ensure we have latitude and longitude
             let tempData = await this.updateWeather();
             let temp = tempData[0];
             let tempDesc = tempData[1];
+
             let aqi = await this.fetchAQ();
-            tableContents += `
+            table.innerHTML += `
                 <tr>
                     <td>${majorCities[index]}</td>
                     <td>${temp} (${tempDesc})</td>
@@ -58,24 +60,25 @@ class Dashboard {
     } catch (error) {
         console.error('Error:', error);
         }
-    table.innerHTML = tableContents;
-    dispTable();
+    //table.innerHTML = tableContents;
+
     }
     }
 
-    changeLoc(loc) {
+    async changeLoc(loc) {
         this.loc = loc;
 
 
     }
     closeModel = () => {
         document.getElementById("popup-container").style.display = "none";
+        this.loc = document.getElementById("locationInput").value;
         this.load.startLoad();
         this.getCoordinates()
         .then(() => {
            this.getForecast();
            this.getAQ();
-           this.fetchPollen(); 
+           this.fetchPollen();
 
            this.getAirQuality();
         this.showWeather();
@@ -95,16 +98,15 @@ class Dashboard {
           .then(response => response.json())
           .then(data => {
             const hourlyData = data.hourly.time;
-            //this.times = hourlyData.map(dateTimeString => new Date(Date.parse(dateTimeString)).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }));
-            //alert(JSON.stringify(this.times));
+
             const temperatures = data.hourly["temperature_2m"];
             showGraph(this.times, temperatures);
           })
           .catch(error => console.error(error));
       }
-      
+
     async updateWeather() {
-        var locationInput = document.getElementById('locationInput').value;
+        var locationInput = this.loc;
         var weatherEndpoint = `https://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=4c80fc5796594d96d997ae47b1620de4`;
             let response = await fetch(weatherEndpoint);
             let data = await response.json();
@@ -114,7 +116,7 @@ class Dashboard {
    }
 
     async getCoordinates() {
-        var locationInput = document.getElementById('locationInput').value;
+        var locationInput = this.loc;
         var nominatimEndpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`;
         let response = await fetch(nominatimEndpoint);
         let data = await response.json();
@@ -130,7 +132,7 @@ class Dashboard {
         const hourly = 'pm10,pm2_5'; // Replace with the hourly air quality variables you are interested in
         const today = new Date().toISOString().slice(0, 10); // Get today's date in ISO format
         const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=${hourly}&start_date=${today}&end_date=${today}`;
-  
+
     fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -151,7 +153,7 @@ async fetchAQ(){ // Define a function to get the current air quality level
     let aqi = data.list[0].components.pm10;
     return aqi;
         }
-    async fetchPollen(){ 
+    async fetchPollen(){
        let particulate_param = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${this.lat}&longitude=${this.long}&hourly=pm10,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen`
        let response = await fetch(particulate_param);
        let data = await response.json();
@@ -163,13 +165,13 @@ async fetchAQ(){ // Define a function to get the current air quality level
     document.getElementById("pollenData").innerHTML = Math.round(sum * 100) / 100 + " µg/m³";
 
         }
-    
+
     showWeather(){
         this.updateWeather()
     .then(weatherData => {
     document.getElementById("weatherData").innerHTML = weatherData[0] + " °C";
       document.getElementById("weatherInfo").innerHTML = weatherData[1];
-      document.getElementById("windSpeed").innerHTML = weatherData[2] + 'm/s';    
+      document.getElementById("windSpeed").innerHTML = weatherData[2] + 'm/s';
     })
 }
 
@@ -178,9 +180,9 @@ getAirQuality() {
     .then(aqi => {
     document.getElementById("airQualityData").innerHTML = aqi + " µg/m³";
       document.getElementById("aq-desc").innerHTML = this.getPM10Description(aqi);
-           
+
 })
-    
+
 }
   getPM10Description(pm10) {
   if (pm10 <= 50) return 'Good';
@@ -207,7 +209,7 @@ function changeUi() { // Function to toggle UI
         document.querySelector("#login-reg").innerHTML = "Already have an account? Log In...";
     } else if (document.forms["form"]["auth"].value == "reg") {
         document.getElementById("username").style.display = "none";
-        document.getElementById("loc").style.display = "none";  
+        document.getElementById("loc").style.display = "none";
         document.forms["form"]["auth"].value = "login";
         document.forms["form"]["sub"].innerHTML = "Log In";
         document.querySelector("#login-reg").innerHTML = "Don't have an account? Register...";
@@ -215,7 +217,7 @@ function changeUi() { // Function to toggle UI
 }
 
 window.addEventListener('DOMContentLoaded', event => {
-    
+
     let dash = new Dashboard();
     document.getElementById("close-model").onclick = dash.closeModel;
     document.getElementById("login-reg").onclick = changeUi;
