@@ -52,7 +52,7 @@ class Dashboard {
     let oldLoc = document.getElementById('locationInput').value;
     try {
     for (let index in majorCities) {
-            document.getElementById('locationInput').value = majorCities[index];
+            await this.changeLoc(majorCities[index]);
             await this.getCoordinates(); // Call getCoordinates first to ensure we have latitude and longitude
             let tempData = await this.updateWeather();
             let temp = tempData[0];
@@ -72,15 +72,16 @@ class Dashboard {
 
     tableContents += `</tbody></table>`;
     table.innerHTML = tableContents;
-    this.loc = document.getElementById("locationInput");
-    document.getElementById("locationInput").value = oldLoc;
-    this.showWeather();
-    
-
+    this.loc = oldLoc;
+    dispTable();
     }
     }
 
+    changeLoc(loc) {
+        this.loc = loc;
 
+
+    }
     closeModel = () => {
         document.getElementById("popup-container").style.display = "none";
         this.load.startLoad();
@@ -228,7 +229,7 @@ function changeUi() { // Function to toggle UI
 }
 
 window.addEventListener('DOMContentLoaded', event => {
-    dispTable();
+    
     let dash = new Dashboard();
     document.getElementById("close-model").onclick = dash.closeModel;
     document.getElementById("login-reg").onclick = changeUi;
