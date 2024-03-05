@@ -149,7 +149,19 @@ include "header.php";
                             <i class="fas fa-table me-1"></i>
                             Forecasts in Major Cities
                         </div>
-                        <div id="tableData"></div>
+                        <div id="tableData">
+                        <table id='datatablesSimple'>
+    <thead>
+            <tr>
+                <th>Location</th>
+                <th>Weather</th>
+                <th>Air Quality (PM10)</th>
+            </tr>
+        </thead>
+        <tbody id="t-bdy"></tbody>
+</table>
+
+                        </div>
                     </div>
                 </div>
             </div>

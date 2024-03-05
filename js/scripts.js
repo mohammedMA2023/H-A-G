@@ -37,18 +37,8 @@ class Dashboard {
         "Cape Town, ZA"
     ];
 
-    let table = document.getElementById("tableData");
-    let tableContents = `
-    <table id='datatablesSimple'>
-    <thead>
-            <tr>
-                <th>Location</th>
-                <th>Weather</th>
-                <th>Air Quality (PM10)</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
+    let table = document.getElementById("t-bdy");
+    let tableContents = "";
     try {
     for (let index in majorCities) {
             this.changeLoc(majorCities[index]);
@@ -68,7 +58,6 @@ class Dashboard {
     } catch (error) {
         console.error('Error:', error);
         }
-    tableContents += `</tbody></table>`;
     table.innerHTML = tableContents;
     dispTable();
     }
