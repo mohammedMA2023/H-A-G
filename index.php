@@ -65,10 +65,14 @@ include "header.php";
             <div id="button-container">
                 <br>
                 <br>
-                <button onclick="document.getElementById('popup-container').style.display = 'block'" class="border" style="width:20%;" id="showLocCon">Enter a new location...</button>
+                <div class="loc-button">
+                                <h1 style="color:white;" class="mt-4">Health Advice Group</h1>
+
+                                <button onclick="document.getElementById('popup-container').style.display = 'block'" class="border" style="width:20%;" id="showLocCon">Enter a new location...</button>
+
+</div>
             </div>
             <div class="container-fluid px-4">
-                <h1 style="color:white;" class="mt-4">Health Advice Group</h1>
                 <ol class="breadcrumb mb-4">
                 </ol>
                 <div id="popup-container" class="popup-container border">
